@@ -11,55 +11,57 @@ class PostModel {
 
     public $removeImageFlag = false;
 
+    const POST_LIST_MAX = 2;
 
     const ACTION_NEW_POST = 0;
     const ACTION_UPDATE_POST = 1;
 
     const IMAGE_MAX_SIZE = 2097152; // 2 * 1024 * 1024;
 
-    public function __construct () {}
-
-    public function setID ($id) {
-        $this->_id = (int) $id;
+    public function __construct() {
     }
 
-    public function getID () {
+    public function setID($id) {
+        $this->_id = (int)$id;
+    }
+
+    public function getID() {
         return $this->_id;
     }
 
-    public function setTitle ($inputTitle) {
+    public function setTitle($inputTitle) {
         $this->_title = $inputTitle;
     }
 
-    public function getTitle () {
+    public function getTitle() {
         return $this->_title;
     }
 
-    public function setDescription ($inputDescription) {
+    public function setDescription($inputDescription) {
         $this->_description = $inputDescription;
     }
 
-    public function getDescription () {
+    public function getDescription() {
         return $this->_description;
     }
 
-    public function setImage ($inputImage) {
+    public function setImage($inputImage) {
         $this->_image = $inputImage;
     }
 
-    public function getImage () {
+    public function getImage() {
         return $this->_image;
     }
 
-    public function setConvertedImageName ($convertedImageName) {
+    public function setConvertedImageName($convertedImageName) {
         $this->_convertedImageName = $convertedImageName;
     }
 
-    public function getErrorMessages () {
+    public function getErrorMessages() {
         return $this->_errorMessages;
     }
 
-    public function processForm ($actionType) {
+    public function processForm($actionType) {
         $result = null;
         $image = $this->getImage();
 
@@ -94,7 +96,7 @@ class PostModel {
         return $result;
     }
 
-    public static function countAll ($params = []) {
+    public static function countAll($params = []) {
         $pdo = DBModel::getInstance();
         $sqlQuery = 'SELECT COUNT(id) FROM post ';
 
@@ -111,7 +113,7 @@ class PostModel {
     }
 
     public static function deleteById($id) {
-        $id = (int) $id;
+        $id = (int)$id;
         $pdo = DBModel::getInstance();
         $sqlQuery = 'DELETE FROM post WHERE id = ' . $id;
 
@@ -124,8 +126,8 @@ class PostModel {
         return $pdo->query($sqlQuery)->execute();
     }
 
-    public static function findOne ($id) {
-        $id = (int) $id;
+    public static function findOne($id) {
+        $id = (int)$id;
         $pdo = DBModel::getInstance();
         $sqlQuery = 'SELECT id, title, description, thumb, publish_date FROM post WHERE id = ' . $id;
 
@@ -134,7 +136,7 @@ class PostModel {
         return is_object($query) ? $query->fetch() : [];
     }
 
-    public static function findAll ($params = []) {
+    public static function findAll($params = []) {
         $pdo = DBModel::getInstance();
         $sqlQuery = 'SELECT id, title, description, thumb, publish_date FROM post';
 
@@ -151,7 +153,7 @@ class PostModel {
         return is_object($query) ? $query->fetchAll() : [];
     }
 
-    public static function removeImage ($file) {
+    public static function removeImage($file) {
         $thumb = $file;
         $thumb_mini = str_replace('.', '_thumb.', $thumb);
 
@@ -160,7 +162,7 @@ class PostModel {
     }
 
 
-    protected function proccessImage () {
+    protected function proccessImage() {
         $inputImage = $this->getImage();
         $inputTmpName = $inputImage['tmp_name'];
         $inputName = $inputImage['name'];
@@ -178,7 +180,7 @@ class PostModel {
         $this->_convertedImageName = $targetName;
     }
 
-    protected function saveUpdatedPost () {
+    protected function saveUpdatedPost() {
         $pdo = DBModel::getInstance();
         $prepareQuery = $pdo->prepare('UPDATE post SET title = :title, description = :description, thumb = :thumb WHERE id = :id');
 
@@ -194,15 +196,15 @@ class PostModel {
 
         if ($save === 0) {
             $this->_errorMessages[] = 'Wystąpił błąd podczas zapisywania danych do bazy.';
+
             return false;
         }
 
-        return (bool) $save;
-
+        return (bool)$save;
 
     }
 
-    protected function saveNewPost () {
+    protected function saveNewPost() {
 
         $pdo = DBModel::getInstance();
         $prepareQuery = $pdo->prepare('INSERT INTO post(title, description, thumb) VALUES (:title, :description, :thumb)');
@@ -218,10 +220,11 @@ class PostModel {
 
         if ($save === 0) {
             $this->_errorMessages[] = 'Wystąpił błąd podczas zapisywania danych do bazy.';
+
             return false;
         }
 
-        return (bool) $save;
+        return (bool)$save;
 
     }
 
@@ -229,7 +232,7 @@ class PostModel {
         /* Get original image x y*/
         list($w, $h) = getimagesize($tmpName);
         /* calculate new image size with ratio */
-        $ratio = max($width/$w, $height/$h);
+        $ratio = max($width / $w, $height / $h);
         $h = ceil($height / $ratio);
         $x = ($w - $width / $ratio) / 2;
         $w = ceil($width / $ratio);

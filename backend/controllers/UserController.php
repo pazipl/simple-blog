@@ -1,6 +1,6 @@
 <?php
 
-class UserController extends Controller{
+class UserController extends Controller {
 
     public function __construct() {
         parent::__construct();
@@ -25,6 +25,7 @@ class UserController extends Controller{
 
             if ($model->valid()) {
                 header("Location: " . BASE_APP_FOLDER);
+
                 return;
             }
         }

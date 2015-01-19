@@ -1,13 +1,13 @@
 <div class="media">
     <?php
-        $image = $post['thumb'];
+    $image = $post['thumb'];
 
-        if ($image) {
-            $src = BASE_APP_FOLDER . '/public/upload/' . $image;
-            echo "<div class='media-object pull-left'>";
-            echo "<img src='" . $src . "'>";
-            echo "</div>";
-        }
+    if ($image) {
+        $src = BASE_APP_FOLDER . '/public/upload/' . $image;
+        echo "<div class='media-object pull-left'>";
+        echo "<img src='" . $src . "'>";
+        echo "</div>";
+    }
 
     ?>
     <div class="media-body">

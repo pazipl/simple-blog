@@ -10,7 +10,7 @@ class DBModel {
     protected static $_dbname = 'SimpleBlog';
     protected static $_connectionOptions = [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
 
-    public static function getInstance () {
+    public static function getInstance() {
         if (!self::$_instance) {
 
             $connectionString = 'mysql:host=' . self::$_host . ';port=' . self::$_port . ';dbname=' . self::$_dbname;

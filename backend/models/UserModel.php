@@ -7,7 +7,14 @@ class UserModel {
 
     public $errorMessage = null;
 
-    public function __construct() {}
+    public function __construct() {
+    }
+
+    public static function assertAuth () {
+        if (!UserModel::isLogged()) {
+            throw new Exception('Nie masz uprawnień do tej akcji!');
+        }
+    }
 
     public function setLogin($inputLogin) {
         $this->_login = $inputLogin;

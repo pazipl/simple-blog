@@ -14,17 +14,18 @@ class View {
     protected $_headScripts = [];
     protected $_bottomScripts = [];
 
-    public function __construct () {}
-
-    public function useLayout ($flag = true) {
-        $this->_useLayout = (bool) $flag;
+    public function __construct() {
     }
 
-    public function getLayoutPath () {
+    public function useLayout($flag = true) {
+        $this->_useLayout = (bool)$flag;
+    }
+
+    public function getLayoutPath() {
         return VIEWS_PATH . 'layout' . DS . 'main.php';
     }
 
-    public function render ($viewName, $viewParams = array()) {
+    public function render($viewName, $viewParams = array()) {
         $this->_viewName = VIEWS_PATH . $viewName . '.php';
         $this->_viewParams = $viewParams;
 
@@ -39,7 +40,7 @@ class View {
         $this->_loadView($this->_viewName);
     }
 
-    protected function _loadView ($filePath) {
+    protected function _loadView($filePath) {
         // Wypakowuje parametry, dostępne dla widoku.
         extract($this->_viewParams);
         // Wyświetlam widok.
@@ -57,17 +58,15 @@ class View {
 
         switch ($scriptPosition) {
             case self::SCRIPT_POS_HEAD:
-                $scripts = & $this->_headScripts;
+                $scripts = &$this->_headScripts;
                 break;
 
             case self::SCRIPT_POS_BOTTOM:
-                $scripts = & $this->_bottomScripts;
+                $scripts = &$this->_bottomScripts;
                 break;
         }
 
-        $scripts[] = '<script type="text/javascript" src="'.$scriptLocation.'"></script>';
-
-
+        $scripts[] = '<script type="text/javascript" src="' . $scriptLocation . '"></script>';
 
     }
 
@@ -86,7 +85,7 @@ class View {
             throw new InvalidArgumentException('Nieprawdłowy argument $scripts.');
         }
 
-        foreach($scripts as $key => $script) {
+        foreach ($scripts as $key => $script) {
             echo $script;
         }
 

@@ -22,13 +22,12 @@ class Bootstrap {
 
         $controller = $this->_requestInfo['controllerName'];
         $action = $this->_requestInfo['actionName'];
-        $params = (array) $this->_requestInfo['params'];
+        $params = (array)$this->_requestInfo['params'];
 
         try {
             $reflection = new ReflectionMethod($controller, $action);
             $reflection->invokeArgs(new $controller, $params);
-        }
-        catch (ReflectionException $e) {
+        } catch (ReflectionException $e) {
             new ErrorController($e);
         }
     }
@@ -36,7 +35,7 @@ class Bootstrap {
 
     private function _buildRequestInfo($requestURL) {
 
-        $requestInfo = & $this->_requestInfo;
+        $requestInfo = &$this->_requestInfo;
 
         if (!$requestURL) {
             $requestURL = $this->_defaultRoute;

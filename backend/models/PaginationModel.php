@@ -9,7 +9,8 @@ class PaginationModel {
     public $perPage;
     public $offsetStart = 0;
 
-    public function __construct () {}
+    public function __construct() {
+    }
 
     public function build($perPage = 2, $total) {
         $this->perPage = $perPage;
@@ -19,7 +20,7 @@ class PaginationModel {
         $this->offsetStart = 0;
     }
 
-    public function setCurrentPage ($currentPage) {
+    public function setCurrentPage($currentPage) {
 
         if ($currentPage > $this->maxPage && $this->maxPage > 0) {
             $currentPage = $this->maxPage;
@@ -28,6 +29,5 @@ class PaginationModel {
         $this->currentPage = $currentPage;
         $this->offsetStart = ($currentPage * $this->perPage) - $this->perPage;
     }
-
 
 }
