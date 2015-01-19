@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 18 Sty 2015, 23:13
+-- Generation Time: 19 Sty 2015, 22:34
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `post` (
 -- Indexes for table `post`
 --
 ALTER TABLE `post`
- ADD PRIMARY KEY (`id`), ADD KEY `publish_date` (`publish_date`), ADD FULLTEXT KEY `description` (`description`), ADD FULLTEXT KEY `title` (`title`);
+ ADD PRIMARY KEY (`id`), ADD KEY `publish_date` (`publish_date`), ADD FULLTEXT KEY `description` (`description`), ADD FULLTEXT KEY `title` (`title`), ADD FULLTEXT KEY `title_2` (`title`), ADD FULLTEXT KEY `description_2` (`description`), ADD FULLTEXT KEY `title_3` (`title`), ADD FULLTEXT KEY `description_3` (`description`), ADD FULLTEXT KEY `title_4` (`title`,`description`);
 
 --
 -- AUTO_INCREMENT for dumped tables
