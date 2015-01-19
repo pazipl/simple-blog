@@ -2,15 +2,30 @@
 
 class PostModel {
 
+    protected $_id;
     protected $_title;
     protected $_description;
     protected $_image;
     protected $_convertedImageName = null;
     protected $_errorMessages = [];
 
+    public $removeImageFlag = false;
+
+
+    const ACTION_NEW_POST = 0;
+    const ACTION_UPDATE_POST = 1;
+
     const IMAGE_MAX_SIZE = 2097152; // 2 * 1024 * 1024;
 
     public function __construct () {}
+
+    public function setID ($id) {
+        $this->_id = (int) $id;
+    }
+
+    public function getID () {
+        return $this->_id;
+    }
 
     public function setTitle ($inputTitle) {
         $this->_title = $inputTitle;
@@ -36,11 +51,16 @@ class PostModel {
         return $this->_image;
     }
 
+    public function setConvertedImageName ($convertedImageName) {
+        $this->_convertedImageName = $convertedImageName;
+    }
+
     public function getErrorMessages () {
         return $this->_errorMessages;
     }
 
-    public function processForm () {
+    public function processForm ($actionType) {
+        $result = null;
         $image = $this->getImage();
 
         if (!$this->getTitle() || !$this->getDescription()) {
@@ -59,7 +79,19 @@ class PostModel {
             $this->proccessImage();
         }
 
-        return empty($this->getErrorMessages()) ? $this->saveNewPost() : false;
+        switch ($actionType) {
+            case self::ACTION_NEW_POST:
+                $result = empty($this->getErrorMessages()) ? $this->saveNewPost() : false;
+                break;
+
+            case self::ACTION_UPDATE_POST:
+                $result = empty($this->getErrorMessages()) ? $this->saveUpdatedPost() : false;
+                break;
+            default:
+                $result = false;
+        }
+
+        return $result;
     }
 
     public static function countAll ($params = []) {
@@ -147,6 +179,26 @@ class PostModel {
     }
 
     protected function saveUpdatedPost () {
+        $pdo = DBModel::getInstance();
+        $prepareQuery = $pdo->prepare('UPDATE post SET title = :title, description = :description, thumb = :thumb WHERE id = :id');
+
+        $prepareQuery->bindValue(':title', $this->getTitle(), PDO::PARAM_STR);
+        $prepareQuery->bindValue(':description', $this->getDescription(), PDO::PARAM_STR);
+        $prepareQuery->bindValue(':id', $this->getID(), PDO::PARAM_INT);
+
+        $thumb = $this->removeImageFlag ? null : $this->_convertedImageName;
+
+        $prepareQuery->bindValue(':thumb', $thumb, PDO::PARAM_STR);
+
+        $save = $prepareQuery->execute();
+
+        if ($save === 0) {
+            $this->_errorMessages[] = 'Wystąpił błąd podczas zapisywania danych do bazy.';
+            return false;
+        }
+
+        return (bool) $save;
+
 
     }
 
