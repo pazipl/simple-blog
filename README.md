@@ -1,1 +1,2 @@
-# simple-blog
+
+### schemat bazy: backend/data/SimpleBlog.sql
