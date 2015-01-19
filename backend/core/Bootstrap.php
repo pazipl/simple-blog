@@ -1,9 +1,11 @@
 <?php
 
+/**
+ * Class Bootstrap Klasa rozruchowa aplikacji, kieruje żądanie do odpowiedniego kontrolera.
+ */
 class Bootstrap {
 
-    protected $_rootPath;
-
+    // Domyślna tablica żądania.
     protected $_requestInfo = [
         'controllerName' => 'PostController',
         'actionName' => 'actionIndex',
@@ -12,12 +14,17 @@ class Bootstrap {
 
 
     public function __construct() {
+        // Buduję tablicę żądania na podstawie przekazanego urla.
         $this->_buildRequestInfo(filter_input(INPUT_GET, 'requestURL', FILTER_SANITIZE_STRING));
+
+        // Uruchamiam kontroller.
         $this->_runController();
 
     }
 
-
+    /**
+     * Metodda tworzy kontroller i wykonuje na nim akcję z parametrami.
+     */
     private function _runController() {
 
         $controller = $this->_requestInfo['controllerName'];
@@ -36,10 +43,6 @@ class Bootstrap {
     private function _buildRequestInfo($requestURL) {
 
         $requestInfo = &$this->_requestInfo;
-
-        if (!$requestURL) {
-            $requestURL = $this->_defaultRoute;
-        }
 
         $parts = explode('/', $requestURL);
 
