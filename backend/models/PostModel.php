@@ -62,10 +62,18 @@ class PostModel {
         return empty($this->getErrorMessages()) ? $this->saveNewPost() : false;
     }
 
-    public static function countAll () {
+    public static function countAll ($params = []) {
         $pdo = DBModel::getInstance();
-        $query = $pdo->prepare("SELECT COUNT(id) FROM post ORDER BY id");
-        $query->execute();
+        $sqlQuery = 'SELECT COUNT(id) FROM post ';
+
+        if (!empty($params) && isset($params['searchQuery']) && $params['searchQuery'] !== '') {
+            $sqlQuery .= ' WHERE MATCH(title, description) AGAINST("' . $params['searchQuery'] . '"  IN BOOLEAN MODE) ';
+        }
+
+        $sqlQuery .= ' ORDER BY id';
+
+        $query = $pdo->query($sqlQuery);
+
 
         return $query->fetchColumn();
     }
@@ -97,6 +105,10 @@ class PostModel {
     public static function findAll ($params = []) {
         $pdo = DBModel::getInstance();
         $sqlQuery = 'SELECT id, title, description, thumb, publish_date FROM post';
+
+        if (!empty($params) && isset($params['searchQuery']) && $params['searchQuery'] !== '') {
+            $sqlQuery .= ' WHERE MATCH(title, description) AGAINST("' . $params['searchQuery'] . '" IN BOOLEAN MODE) ';
+        }
 
         if (!empty($params) && isset($params['offsetStart']) && isset($params['perPage'])) {
             $sqlQuery .= ' LIMIT ' . $params['offsetStart'] . ', ' . $params['perPage'];

@@ -30,5 +30,12 @@
 
         </ul>
 
+        <form class="navbar-form navbar-right" role="search" method="GET">
+            <div class="form-group">
+                <input id="inputSearchQuery" name="inputSearchQuery" value="<?php echo $inputSearchQuery; ?>" type="text" class="form-control" placeholder="Wpisz szukaną frazę">
+            </div>
+            <button type="submit" class="btn btn-default">Szukaj</button>
+        </form>
+
     </div>
 </nav>

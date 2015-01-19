@@ -10,12 +10,14 @@ class PostController extends Controller {
     public function actionIndex($page = 1) {
 
         $page = (int) $page;
+        $inputSearchQuery = filter_input(INPUT_GET, 'inputSearchQuery', FILTER_SANITIZE_MAGIC_QUOTES);
 
         $pagination = new PaginationModel();
-        $pagination->build(2, PostModel::countAll());
+        $pagination->build(2, PostModel::countAll(['searchQuery' => $inputSearchQuery]));
         $pagination->setCurrentPage($page);
 
         $posts = PostModel::findAll([
+            'searchQuery' => $inputSearchQuery,
             'offsetStart' => $pagination->offsetStart,
             'perPage' => $pagination->perPage
         ]);
@@ -28,8 +30,9 @@ class PostController extends Controller {
 
         $viewParams = [
             'headerText' => 'Lista postów',
-            'posts' => $posts,
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'inputSearchQuery' => stripslashes($inputSearchQuery),
+            'posts' => $posts
         ];
 
         $view->render('post/list', $viewParams);

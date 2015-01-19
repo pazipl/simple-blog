@@ -21,7 +21,7 @@ class PaginationModel {
 
     public function setCurrentPage ($currentPage) {
 
-        if ($currentPage > $this->maxPage) {
+        if ($currentPage > $this->maxPage && $this->maxPage > 0) {
             $currentPage = $this->maxPage;
         }
 
