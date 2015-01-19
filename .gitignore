@@ -1,0 +1,8 @@
+# Upload path
+/public/upload
+
+# PHP Storm
+.idea
+
+# Mac finder artifacts
+.DS_Store
